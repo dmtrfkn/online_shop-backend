@@ -1,0 +1,27 @@
+// {
+//   "compilerOptions": {
+//     "target": "es6",
+//     "module": "commonjs",
+//     "outDir": "dist",
+//     "strict": true,
+//     "esModuleInterop": true
+//   },
+//   "include": ["src/**/*"]
+// }
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    // "strict": true, // Включает строгую типизацию
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    // "sourceMap": true,
+    // "moduleResolution": "node",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"]
+}
