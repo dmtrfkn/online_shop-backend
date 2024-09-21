@@ -1,5 +1,9 @@
 import { DataSource } from 'typeorm';
 import { User } from './entity/User'; // Импортируйте ваши сущности
+import { Cart } from './entity/Cart';
+import { Product } from './entity/Product';
+import { WishList } from './entity/WishList';
+import { Comment } from './entity/Comment';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -7,8 +11,8 @@ export const AppDataSource = new DataSource({
   port: 5432,
   username: 'foki',
   password: 'foki',
-  database: 'fokidb',
+  database: 'mydb',
   synchronize: true,
   logging: false,
-  entities: [User],
+  entities: [User, Cart, Product, WishList, Comment],
 });

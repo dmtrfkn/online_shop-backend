@@ -16,6 +16,20 @@ export class UserService {
     return await userRepository.findOneBy({ id });
   }
 
+  static async getUserByName(name: string, pwd: string) {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOneBy({ login: name });
+    if (user) {
+      if (pwd === user.password) {
+        return user;
+      } else {
+        throw new Error('Неверный пароль');
+      }
+    } else {
+      throw new Error('Неверный логин');
+    }
+  }
+
   static async createUser(userData: Partial<User>) {
     const userRepository = AppDataSource.getRepository(User);
     const user = userRepository.create(userData);
