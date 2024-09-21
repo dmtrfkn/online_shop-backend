@@ -4,9 +4,8 @@ import { ProductService } from '../services/ProductService';
 export class ProductController {
   static async createProduct(req: Request, res: Response) {
     try {
-      const productData = req.body; // Данные о продукте передаются в теле запроса
+      const productData = req.body;
       const newProduct = await ProductService.createProduct(productData);
-
       res.status(201).json(newProduct);
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -18,7 +17,6 @@ export class ProductController {
 
     try {
       await ProductService.deleteProduct(Number(id));
-
       res.status(204).send();
     } catch (error) {
       res.status(404).json({ message: error.message });
@@ -34,7 +32,6 @@ export class ProductController {
     }
   }
 
-  // Получение продукта по ID с комментариями
   static async getProductById(req: Request, res: Response) {
     const id = parseInt(req.params.id);
 
@@ -46,5 +43,15 @@ export class ProductController {
     }
   }
 
-  // Дополнительные методы для получения продуктов можно добавить здесь
+  static async updateProduct(req: Request, res: Response) {
+    const id = parseInt(req.params.id);
+    const productData = req.body;
+
+    try {
+      const updatedProduct = await ProductService.updateProduct(id, productData);
+      res.status(200).json(updatedProduct);
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  }
 }

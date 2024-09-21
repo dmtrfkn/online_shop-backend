@@ -1,50 +1,38 @@
 import { Request, Response } from 'express';
-import { WishListService } from '../services/WishListService';
+import { ProductService } from '../services/ProductService';
 
-export class WishListController {
-  static async getWishListByUserId(req: Request, res: Response) {
+export class WishlistController {
+  static async addToWishlist(req: Request, res: Response) {
+    const { productId } = req.body;
+    const userId = req.params.userId;
+
+    try {
+      const wishlistItem = await ProductService.addToWishlist(+userId, productId);
+      res.status(201).json(wishlistItem);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  static async getUserWishlist(req: Request, res: Response) {
     const { userId } = req.params;
+
     try {
-      const wishList = await WishListService.getWishListByUserId(Number(userId));
-      res.json(wishList);
+      const wishlistItems = await ProductService.getUserWishlist(Number(userId));
+      res.status(200).json(wishlistItems);
     } catch (error) {
-      res.status(404).json({ message: error.message });
+      res.status(500).json({ error: error.message });
     }
   }
 
-  static async addProductToWishList(req: Request, res: Response) {
+  static async removeFromWishlist(req: Request, res: Response) {
     const { userId, productId } = req.params;
-    try {
-      const updatedWishList = await WishListService.addProductToWishList(
-        Number(userId),
-        Number(productId),
-      );
-      res.json(updatedWishList);
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
-  }
 
-  static async removeProductFromWishList(req: Request, res: Response) {
-    const { userId, productId } = req.params;
     try {
-      const updatedWishList = await WishListService.removeProductFromWishList(
-        Number(userId),
-        Number(productId),
-      );
-      res.json(updatedWishList);
+      await ProductService.removeFromWishlist(Number(userId), Number(productId));
+      res.status(204).send();
     } catch (error) {
-      res.status(404).json({ message: error.message });
-    }
-  }
-
-  static async clearWishList(req: Request, res: Response) {
-    const { userId } = req.params;
-    try {
-      const clearedWishList = await WishListService.clearWishList(Number(userId));
-      res.json(clearedWishList);
-    } catch (error) {
-      res.status(404).json({ message: error.message });
+      res.status(500).json({ error: error.message });
     }
   }
 }
