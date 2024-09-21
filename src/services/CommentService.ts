@@ -4,31 +4,13 @@ import { User } from '../entity/User';
 import { Product } from '../entity/Product';
 
 export class CommentService {
-  // static async createComment(commentData: Partial<Comment>, userId: number, productId: number) {
-  //   const commentRepository = AppDataSource.getRepository(Comment);
-  //   const userRepository = AppDataSource.getRepository(User);
-  //   const productRepository = AppDataSource.getRepository(Product);
-
-  //   // Проверяем существование пользователя и продукта
-  //   const user = await userRepository.findOneBy({ id: userId });
-  //   const product = await productRepository.findOneBy({ id: productId });
-
-  //   if (!user) {
-  //     throw new Error('Пользователь не найден');
-  //   }
-  //   if (!product) {
-  //     throw new Error('Продукт не найден');
-  //   }
-
-  //   // Создаем комментарий без установки связей напрямую
-  //   const comment = commentRepository.create({
-  //     ...commentData,
-  //     user: { id: userId }, // Устанавливаем только идентификатор пользователя
-  //     product: { id: productId }, // Устанавливаем только идентификатор продукта
-  //   });
-
-  //   return await commentRepository.save(comment);
-  // }
+  static async getCommentsForProduct(productId: number) {
+    const commentRepository = AppDataSource.getRepository(Comment);
+    return await commentRepository.find({
+      where: { product: { id: productId } },
+      relations: ['user', 'product'], // Загружаем связанные данные о пользователе и продукте
+    });
+  }
 
   static async deleteComment(id: number) {
     const commentRepository = AppDataSource.getRepository(Comment);

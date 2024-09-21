@@ -21,7 +21,7 @@ export class CartService {
     return cart;
   }
 
-  // Добавление продукта в корзину пользователя
+  // // Добавление продукта в корзину пользователя
   static async addProductToCart(userId: number, productId: number) {
     const cartRepository = AppDataSource.getRepository(Cart);
     const userRepository = AppDataSource.getRepository(User);

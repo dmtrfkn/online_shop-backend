@@ -13,12 +13,24 @@ export class UserService {
 
   static async getUserById(id: number) {
     const userRepository = AppDataSource.getRepository(User);
-    return await userRepository.findOneBy({ id });
+    const user = await userRepository.findOne({
+      where: { id },
+      relations: ['comments', 'cart'], // Загружаем связанные комментарии
+    });
+
+    if (!user) {
+      throw new Error('Пользователь не найден');
+    }
+
+    return user;
   }
 
   static async getUserByName(name: string, pwd: string) {
     const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.findOneBy({ login: name });
+    const user = await userRepository.findOne({
+      where: { login: name },
+      relations: ['comments', 'cart'], // Загружаем связанные комментарии
+    });
     if (user) {
       if (pwd === user.password) {
         return user;

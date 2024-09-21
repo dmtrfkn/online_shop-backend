@@ -27,8 +27,8 @@ router.delete('/users/:userId/wishlist', WishListController.clearWishList);
 // Корзина
 router.get('/users/:userId/cart', CartController.getCartByUserId);
 router.post('/users/:userId/cart/products/:productId', CartController.addProductToCart);
-router.delete('/users/:userId/cart/products/:productId', CartController.removeProductFromCart);
-router.delete('/users/:userId/cart', CartController.clearCart);
+// router.delete('/users/:userId/cart/products/:productId', CartController.removeProductFromCart);
+// router.delete('/users/:userId/cart', CartController.clearCart);
 
 // Комментарии
 router.post('/users/:userId/products/:productId/comments', CommentController.addCommentToProduct);
@@ -37,5 +37,7 @@ router.delete('/comments/:id', CommentController.deleteComment);
 // Продукты
 router.post('/products', ProductController.createProduct);
 router.delete('/products/:id', ProductController.deleteProduct);
+router.get('/products', ProductController.getAllProducts);
+router.get('/products/:id', ProductController.getProductById);
 
 export default router;

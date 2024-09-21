@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Cart } from './Cart';
 import { Comment } from './Comment';
 import { WishList } from './WishList';
@@ -20,12 +20,12 @@ export class User {
   @Column()
   ageInDogYears: number;
 
-  @OneToOne(() => Cart, (cart) => cart.id)
-  cart: Cart;
+  @OneToOne(() => Cart, (cart) => cart.user, { eager: true }) // Один пользователь имеет одну корзину
+  cart: Cart; // Изменено на одну корзину
 
-  @OneToOne(() => WishList, (wishList) => wishList.id)
-  wishList: WishList;
-
-  @OneToMany(() => Comment, (comment) => comment.id)
+  @OneToMany(() => Comment, (comment) => comment.user, { eager: true }) // Загружаем комментарии
   comments: Comment[];
+
+  @OneToOne(() => WishList, (wishList) => wishList.user)
+  wishList: WishList;
 }

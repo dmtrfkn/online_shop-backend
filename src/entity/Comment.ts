@@ -1,18 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
-import { Product } from './Product';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from './User';
+import { Product } from './Product';
 
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
-  user: User;
-
   @Column()
-  text: string;
+  content: string;
 
-  @ManyToOne(() => Product, (product) => product.id)
-  product: Product;
+  @ManyToOne(() => User, (user) => user.comments)
+  user: User; // Связь с пользователем
+
+  @ManyToOne(() => Product, (product) => product.comments)
+  product: Product; // Связь с продуктом
 }

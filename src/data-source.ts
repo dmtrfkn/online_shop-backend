@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
   port: 5432,
   username: 'foki',
   password: 'foki',
-  database: 'mydb',
+  database: 'one',
   synchronize: true,
   logging: false,
   entities: [User, Cart, Product, WishList, Comment],

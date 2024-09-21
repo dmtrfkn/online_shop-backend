@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, ManyToMany } from 'typeorm';
 import { User } from './User';
 import { Product } from './Product';
 
@@ -8,8 +8,10 @@ export class Cart {
   id: number;
 
   @OneToOne(() => User, (user) => user.cart)
-  user: User;
+  user: User; // Один пользователь имеет одну корзину
 
-  @OneToMany(() => Product, (product) => product.id)
+  @ManyToMany(() => Product, (product) => product.carts, { eager: true }) // Связь с элементами корзины
   products: Product[];
+
+  // Связь с элементами корзины будет в отдельной сущности CartItem
 }
