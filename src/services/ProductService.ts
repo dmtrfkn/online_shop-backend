@@ -67,6 +67,15 @@ export class ProductService {
     return comment;
   }
 
+  static async getCommentsForProduct(productId: number) {
+    const comments = await prisma.comment.findMany({
+      where: { productId },
+      include: { user: true },
+    });
+
+    return comments;
+  }
+
   static async addToCart(userId: number, productId: number, quantity: number) {
     const existingCartItem = await prisma.cart.findUnique({
       where: {
