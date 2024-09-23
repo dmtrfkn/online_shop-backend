@@ -22,6 +22,7 @@ router.get('/users/:userId/cart', CartController.getUserCart);
 
 // Комментарии
 router.post('/products/:productId/comments', CommentController.createComment);
+router.get('/products/:id/comments', CommentController.getCommentsByProductId);
 
 // Продукты
 router.post('/products', ProductController.createProduct);
