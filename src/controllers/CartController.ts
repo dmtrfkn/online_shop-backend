@@ -1,47 +1,31 @@
 import { Request, Response } from 'express';
-import { CartService } from '../services/CartService';
+import { ProductService } from '../services/ProductService';
 
 export class CartController {
-  static async getCartByUserId(req: Request, res: Response) {
-    const { userId } = req.params;
-    try {
-      const cart = await CartService.getCartByUserId(Number(userId));
-      res.json(cart);
-    } catch (error) {
-      res.status(404).json({ message: error.message });
-    }
-  }
+  static async addToCart(req: Request, res: Response) {
+    const { productId, quantity } = req.body;
+    const userId = req.params.userId;
 
-  static async addProductToCart(req: Request, res: Response) {
-    const { userId, productId } = req.params;
     try {
-      const updatedCart = await CartService.addProductToCart(Number(userId), Number(productId));
-      res.json(updatedCart);
+      const cartItem = await ProductService.addToCart(
+        Number(userId),
+        Number(productId),
+        Number(quantity),
+      );
+      res.status(201).json(cartItem);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   }
 
-  static async removeProductFromCart(req: Request, res: Response) {
-    const { userId, productId } = req.params;
-    try {
-      const updatedCart = await CartService.removeProductFromCart(
-        Number(userId),
-        Number(productId),
-      );
-      res.json(updatedCart);
-    } catch (error) {
-      res.status(404).json({ message: error.message });
-    }
-  }
+  static async getUserCart(req: Request, res: Response) {
+    const userId = req.params.userId;
 
-  static async clearCart(req: Request, res: Response) {
-    const { userId } = req.params;
     try {
-      const clearedCart = await CartService.clearCart(Number(userId));
-      res.json(clearedCart);
+      const cartItems = await ProductService.getUserCart(Number(userId));
+      res.status(200).json(cartItems);
     } catch (error) {
-      res.status(404).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   }
 }

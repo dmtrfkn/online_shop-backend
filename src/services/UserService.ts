@@ -1,21 +1,11 @@
-import { AppDataSource } from '../data-source';
-import { User } from '../entity/User';
+import { PrismaClient, User } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export class UserService {
-  static async getAllUsers() {
-    try {
-      const userRepository = AppDataSource.getRepository(User);
-      return await userRepository.find();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   static async getUserById(id: number) {
-    const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.findOne({
+    const user = await prisma.user.findUnique({
       where: { id },
-      relations: ['comments', 'cart'], // Загружаем связанные комментарии
     });
 
     if (!user) {
@@ -25,12 +15,11 @@ export class UserService {
     return user;
   }
 
-  static async getUserByName(name: string, pwd: string) {
-    const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.findOne({
-      where: { login: name },
-      relations: ['comments', 'cart'], // Загружаем связанные комментарии
+  static async getUserByName(login: string, pwd: string) {
+    const user = await prisma.user.findFirst({
+      where: { login },
     });
+
     if (user) {
       if (pwd === user.password) {
         return user;
@@ -43,18 +32,15 @@ export class UserService {
   }
 
   static async createUser(userData: Partial<User>) {
-    const userRepository = AppDataSource.getRepository(User);
-    const user = userRepository.create(userData);
-    return await userRepository.save(user);
-  }
+    const user = await prisma.user.create({
+      data: {
+        login: userData.login,
+        password: userData.password,
+        age: userData.age,
+        ageInDogYears: userData.age * 7,
+      },
+    });
 
-  static async updateUser(id: number, userData: Partial<User>) {
-    const userRepository = AppDataSource.getRepository(User);
-    await userRepository.update(id, userData);
-  }
-
-  static async deleteUser(id: number) {
-    const userRepository = AppDataSource.getRepository(User);
-    await userRepository.delete(id);
+    return user;
   }
 }
